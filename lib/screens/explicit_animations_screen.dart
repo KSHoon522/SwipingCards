@@ -13,7 +13,21 @@ class _ExplicitAnimationsScreenState extends State<ExplicitAnimationsScreen>
   late final AnimationController _animationController = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 2),
-  );
+  )
+        ..addListener(() {
+          _value.value = _animationController.value;
+        })
+        ..addStatusListener((status) {
+          print(status);
+        })
+      /* ..addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _animationController.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        _animationController.forward();
+      }
+    }) */
+      ;
 
   late final Animation<Decoration> _decoration = DecorationTween(
     begin: BoxDecoration(
@@ -21,25 +35,31 @@ class _ExplicitAnimationsScreenState extends State<ExplicitAnimationsScreen>
       borderRadius: BorderRadius.circular(20),
     ),
     end: BoxDecoration(
-      color: Colors.red,
+      color: Colors.blue,
       borderRadius: BorderRadius.circular(120),
     ),
-  ).animate(_animationController);
+  ).animate(_curve);
 
   late final Animation<double> _rotation = Tween(
     begin: 0.0,
-    end: 2.0,
-  ).animate(_animationController);
+    end: 0.5,
+  ).animate(_curve);
 
   late final Animation<double> _scale = Tween(
     begin: 1.0,
     end: 0.5,
-  ).animate(_animationController);
+  ).animate(_curve);
 
   late final Animation<Offset> _offset = Tween(
     begin: Offset.zero,
-    end: const Offset(0, -0.2),
-  ).animate(_animationController);
+    end: const Offset(0, -0.5),
+  ).animate(_curve);
+
+  late final CurvedAnimation _curve = CurvedAnimation(
+    parent: _animationController,
+    curve: Curves.elasticOut,
+    reverseCurve: Curves.bounceIn,
+  );
 
   void _play() {
     _animationController.forward();
@@ -51,6 +71,26 @@ class _ExplicitAnimationsScreenState extends State<ExplicitAnimationsScreen>
 
   void _rewind() {
     _animationController.reverse();
+  }
+
+  final ValueNotifier<double> _value = ValueNotifier(0.0);
+
+  void _onChanged(double value) {
+    _value.value = 0;
+    _animationController.value = value;
+  }
+
+  bool _looping = false;
+
+  void _toggleLooping() {
+    if (_looping) {
+      _animationController.stop();
+    } else {
+      _animationController.repeat(reverse: true);
+    }
+    setState(() {
+      _looping = !_looping;
+    });
   }
 
   @override
@@ -95,18 +135,34 @@ class _ExplicitAnimationsScreenState extends State<ExplicitAnimationsScreen>
                   onPressed: _play,
                   child: const Text("Play"),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 5),
                 ElevatedButton(
                   onPressed: _pause,
                   child: const Text("Pause"),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 5),
                 ElevatedButton(
                   onPressed: _rewind,
                   child: const Text("Rewind"),
                 ),
+                const SizedBox(width: 5),
+                ElevatedButton(
+                  onPressed: _toggleLooping,
+                  child: Text(_looping ? "Stop Looping" : "Start Looping"),
+                ),
               ],
-            )
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            ValueListenableBuilder(
+                valueListenable: _value,
+                builder: (context, value, child) {
+                  return Slider(
+                    value: value,
+                    onChanged: _onChanged,
+                  );
+                })
           ],
         ),
       ),
