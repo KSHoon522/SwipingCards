@@ -8,8 +8,23 @@ class SwipingCardsScreen extends StatefulWidget {
 }
 
 class _SwipingCardsScreenState extends State<SwipingCardsScreen> {
+  double posX = 0;
+
+  void _onHorizontalDragUpdate(DragUpdateDetails details) {
+    setState(() {
+      posX += details.delta.dx;
+    });
+  }
+
+  void _onHorizontalDragEnd(DragEndDetails details) {
+    setState(() {
+      posX = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(posX);
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -19,12 +34,19 @@ class _SwipingCardsScreenState extends State<SwipingCardsScreen> {
         children: [
           Align(
             alignment: Alignment.topCenter,
-            child: Material(
-              elevation: 10,
-              color: Colors.red.shade100,
-              child: SizedBox(
-                width: size.width * 0.8,
-                height: size.height * 0.5,
+            child: GestureDetector(
+              onHorizontalDragUpdate: _onHorizontalDragUpdate,
+              onHorizontalDragEnd: _onHorizontalDragEnd,
+              child: Transform.translate(
+                offset: Offset(posX, 0),
+                child: Material(
+                  elevation: 10,
+                  color: Colors.red.shade100,
+                  child: SizedBox(
+                    width: size.width * 0.8,
+                    height: size.height * 0.5,
+                  ),
+                ),
               ),
             ),
           ),
