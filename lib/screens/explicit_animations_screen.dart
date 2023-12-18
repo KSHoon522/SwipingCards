@@ -13,12 +13,8 @@ class _ExplicitAnimationsScreenState extends State<ExplicitAnimationsScreen>
   late final AnimationController _animationController = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 2),
-  )
-    ..addListener(() {
+  )..addListener(() {
       _value.value = _animationController.value;
-    })
-    ..addStatusListener((status) {
-      print(status);
     });
 
   late final Animation<Decoration> _decoration = DecorationTween(
