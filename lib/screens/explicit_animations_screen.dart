@@ -14,20 +14,12 @@ class _ExplicitAnimationsScreenState extends State<ExplicitAnimationsScreen>
     vsync: this,
     duration: const Duration(seconds: 2),
   )
-        ..addListener(() {
-          _value.value = _animationController.value;
-        })
-        ..addStatusListener((status) {
-          print(status);
-        })
-      /* ..addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _animationController.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        _animationController.forward();
-      }
-    }) */
-      ;
+    ..addListener(() {
+      _value.value = _animationController.value;
+    })
+    ..addStatusListener((status) {
+      print(status);
+    });
 
   late final Animation<Decoration> _decoration = DecorationTween(
     begin: BoxDecoration(
