@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # flutter_animation_masterclass
 
 A new Flutter project.
@@ -22,3 +23,6 @@ samples, guidance on mobile development, and a full API reference.
 =======
 # AppleWatch
 >>>>>>> b2bfd6caf3d12cde630c61bc66ffb05beac0cc82
+=======
+# SwipingCards
+>>>>>>> 69df465ace6fbe45651ff5b3d6c2558811e8fc4e
